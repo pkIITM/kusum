@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bill - Plateful & Platter</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Logo" class="logo" />
+    <h1>Plateful & Platter</h1>
+    <p>Taste that Matters.</p>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact Us</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="bill-section"></section>
+    <button onclick="window.location.href='menu.html';">Back to Menu</button>
+  </main>
+
+  <footer>
+    <img src="logo.png" alt="Logo" class="logo" />
+    <p>&copy; 2025 Pallav's P & P Kitchen. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Bill Page Script: retrieve the cart and display the bill
+    document.addEventListener("DOMContentLoaded", function () {
+      const billSection = document.getElementById("bill-section");
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let billHTML = `
+        <div class="bill-header">
+          <img src="logo.png" alt="Logo" class="bill-logo" style="height:60px; margin-bottom:10px;"/>
+          <h2>Plateful & Platter</h2>
+        </div>
+        <h3>Bill Details:</h3>
+      `;
+      let total = 0;
+
+      if (cart.length === 0) {
+        billHTML += "<p>No items in your order.</p>";
+      } else {
+        billHTML += "<table style='width:100%; border-collapse: collapse;'>"
+        billHTML += "<thead><tr><th style='border:1px solid #ddd; padding:8px;'>Item</th><th style='border:1px solid #ddd; padding:8px;'>Quantity</th><th style='border:1px solid #ddd; padding:8px;'>Price</th><th style='border:1px solid #ddd; padding:8px;'>Total</th></tr></thead><tbody>";
+        cart.forEach(item => {
+          const itemTotal = item.price * item.quantity;
+          total += itemTotal;
+          billHTML += `<tr>
+            <td style='border:1px solid #ddd; padding:8px;'>${item.name}</td>
+            <td style='border:1px solid #ddd; padding:8px;'>${item.quantity}</td>
+            <td style='border:1px solid #ddd; padding:8px;'>₹${item.price}</td>
+            <td style='border:1px solid #ddd; padding:8px;'>₹${itemTotal}</td>
+          </tr>`;
+        });
+        billHTML += "</tbody></table>";
+        billHTML += `<h3>Total Amount: ₹${total}</h3>`;
+        billHTML += `<p>Please pay this amount.</p>`;
+      }
+      billSection.innerHTML = billHTML;
+      // Optionally, clear the cart after billing:
+      localStorage.removeItem("cart");
+    });
+  </script>
+</body>
+</html>
